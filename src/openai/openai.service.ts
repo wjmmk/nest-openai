@@ -5,7 +5,7 @@ import { UpdateOpenaiDto } from './dto/update-openai.dto';
 @Injectable()
 export class OpenaiService {
   create(createOpenaiDto: CreateOpenaiDto) {
-    return 'This action adds a new openai';
+    return `This action adds a new openai ${JSON.stringify(createOpenaiDto)}`;
   }
 
   findAll() {
@@ -17,7 +17,7 @@ export class OpenaiService {
   }
 
   update(id: number, updateOpenaiDto: UpdateOpenaiDto) {
-    return `This action updates a #${id} openai`;
+    return `This action updates a #${id} openai with ${JSON.stringify(updateOpenaiDto)}`;
   }
 
   remove(id: number) {
