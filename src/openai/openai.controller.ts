@@ -7,7 +7,7 @@ import { UpdateOpenaiDto } from './dto/update-openai.dto';
 export class OpenaiController {
   constructor(private readonly openaiService: OpenaiService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createOpenaiDto: CreateOpenaiDto) {
     return this.openaiService.create(createOpenaiDto);
   }
