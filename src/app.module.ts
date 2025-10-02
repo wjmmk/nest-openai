@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { OpenaiModule } from './openai/openai.module';
 import { OutServiceService } from './openai/out-service/out-service.service';
 import { GptModule } from './gpt/gpt.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [OpenaiModule, GptModule],
+  imports: [ConfigModule.forRoot(), OpenaiModule, GptModule],
   controllers: [AppController],
   providers: [AppService, OutServiceService],
 })
