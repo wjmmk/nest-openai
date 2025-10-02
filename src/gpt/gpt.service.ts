@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateGptDto } from './dto/create-gpt.dto';
-import { orthographyUseCase } from './use-cases';
+import { orthographyUseCase } from './use-cases/orthography.use-case';
+
 
 @Injectable()
 export class GptService {
@@ -13,7 +14,10 @@ export class GptService {
        }
     }
    
-   orthographyCheckUseCase({ title, prompt }: CreateGptDto) {
-        return orthographyUseCase({ title, prompt });
+   orthographyCheckUseCase(createGptDto: CreateGptDto) {
+         return orthographyUseCase({
+             prompt: createGptDto.prompt,
+             title: createGptDto.title ?? ''
+         });
    }
 }   
