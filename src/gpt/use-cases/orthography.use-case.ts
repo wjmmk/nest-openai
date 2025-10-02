@@ -1,31 +1,40 @@
-import OpenAI from "openai";
+//import OpenAI from "openai";
+import { GoogleGenAI } from '@google/genai';
+//import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 
 interface Options {
     prompt: string;
     title: string;
 }
 
-export const orthographyUseCase = async (openai: OpenAI, options: Options) => {
+export const orthographyUseCase = async (gemini: GoogleGenAI, options: Options): Promise<any> => {
     const { prompt, title } = options;
 
-    const completion = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        temperature: 0.3,
-        max_tokens: 150,
-        messages: [
-            { role: 'system', content: 'Eres un asistente que ayuda a los desarrolladores a crear código limpio y eficiente.' },
-            { role: 'user', content: `Eres un desarrollador experto en ${title}. Crea un programa que ${prompt}` },
-        ],
-       /*  response_format: { type: 'text' }, */
-        response_format: { type: 'json_object' },
+    const completion = await fetch("https://openrouter.ai/api/v1/chat/completions",{
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${process.env.GOOGLE_API_KEY}`, // Replace with your actual API key
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "model": "google/gemini-2.5-flash",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        { role: 'user', content: `Eres un desarrollador experto en ${title}. Crea un programa que ${prompt}` },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+                            }
+                        }
+                    ]
+                }
+            ]
+        })
     });
 
-    console.log('Response LLMs:', completion.choices[0].message); 
-
-    return {  
-        code: 200,
-        message: `Developer in: ${title} for ${prompt}`,
-        apikey: process.env.OPENAI_API_KEY || 'No API Key found',
-    };
+    return completion.json();
 }
     

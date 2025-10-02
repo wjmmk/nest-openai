@@ -13,7 +13,7 @@ export class GptController {
 
   @Post('orthography-use-case')
   orthographyUseCase(@Body() createGptDto : CreateGptDto) {
-    return this.gptService.orthographyCheckUseCase(createGptDto);
+    return this.gptService.callModelAi(createGptDto);
   }
 }
   
