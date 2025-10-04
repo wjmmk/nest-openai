@@ -10,31 +10,16 @@ interface Options {
 export const orthographyUseCase = async (gemini: GoogleGenAI, options: Options): Promise<any> => {
     const { prompt, title } = options;
 
-    const completion = await fetch("https://openrouter.ai/api/v1/chat/completions",{
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${process.env.GOOGLE_API_KEY}`, // Replace with your actual API key
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            "model": "google/gemini-2.5-flash",
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        { role: 'user', content: `Eres un desarrollador experto en ${title}. Crea un programa que ${prompt}` },
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
-                            }
-                        }
-                    ]
-                }
-            ]
-        })
+    const response = await gemini.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: `Eres un desarrollador experto en ${title}. Crea un programa que ${prompt}`,
+        config: {
+            thinkingConfig: {
+                thinkingBudget: 0, // Disables thinking
+            },
+        }        
     });
 
-    return completion.json();
+    return response.candidates?.[0]?.content?.parts?.[0]?.text ?? undefined
 }
     
