@@ -8,12 +8,12 @@ export class GptController {
 
   @Post('orthography')
   correctOrthography(@Body() createGptDto: CreateGptDto) {
-    return this.gptService.orthographyCheck(createGptDto);
+    return this.gptService.callModelAi(createGptDto);
   }
 
   @Post('orthography-use-case')
   orthographyUseCase(@Body() createGptDto : CreateGptDto) {
-    return this.gptService.callModelAi(createGptDto);
+    return this.gptService.orthographyCheckUseCase(createGptDto);
   }
 }
   
