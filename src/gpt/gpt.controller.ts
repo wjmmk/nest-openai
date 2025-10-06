@@ -15,5 +15,11 @@ export class GptController {
   orthographyUseCase(@Body() createGptDto : CreateGptDto) {
     return this.gptService.orthographyCheckUseCase(createGptDto);
   }
+
+  @Post('orthography-openai-from-gemini')
+  orthographyOpenAIFromGemini(@Body() createGptDto: CreateGptDto) {
+    console.log('Llamando a orthographyOpenAIFromGemini con DTO:', createGptDto);
+    return this.gptService.callOpenAIFromGemini(createGptDto);
+  }
 }
   

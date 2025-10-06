@@ -1,17 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { CreateGptDto } from './dto/create-gpt.dto';
 import { orthographyUseCase } from './use-cases/orthography.use-case';
-//import OpenAI from 'openai';
+import OpenAI from 'openai';
 import { GoogleGenAI } from '@google/genai';
 //import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 
 @Injectable()
 export class GptService {
-  /*  private openai = new OpenAI({
-         baseURL: 'https://openrouter.ai/api/v1',
-         apiKey: process.env.OPENAI_API_KEY,
-   }) */
+   private openai = new OpenAI({
+         baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+         apiKey: process.env.GEMINI_API_KEY,
+   })
 
+   async callOpenAIFromGemini(createGptDto: CreateGptDto): Promise<any> {
+      const { prompt, title } = createGptDto;
+      const response = await this.openai.chat.completions.create({  
+            model: 'gemini-2.5-flash',
+            reasoning_effort: 'low',
+            messages: [
+               /* { role: 'system', content: 'You are a helpful assistant that translates English to Spanish.' }, */
+               { role: 'user', content: `Eres un desarrollador experto en ${title}. Crea un programa que ${prompt}` },
+            ],
+            temperature: 0.3,
+            max_tokens: 1024,
+      });
+        return response.choices[0].message?.content ?? undefined;
+  }
 
    private gemini = new GoogleGenAI({apiKey: process.env.GOOGLE_API_KEY}); 
 
