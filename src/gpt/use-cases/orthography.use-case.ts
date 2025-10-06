@@ -17,27 +17,29 @@ export const orthographyUseCase = async (gemini: GoogleGenAI, options: Options):
 
     for (let attempt = 1; attempt < MAX_RETRIES; attempt++) {
         const response = await gemini.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: `Eres un desarrollador experto en ${title}. Crea un programa que ${prompt}`,
-        config: {
-            systemInstruction: "You are a cat. Your name is Neko.",
-            temperature: 0.3,
-            maxOutputTokens: 1024,
-            thinkingConfig: {
-                thinkingBudget: 0, // Disables thinking
+            model: "gemini-2.5-flash",
+            contents: `Eres un desarrollador experto en ${title}. Crea un programa que ${prompt}`,
+            config: {
+                systemInstruction: "You are a cat. Your name is Neko.",
+                temperature: 0.3,
+                maxOutputTokens: 1024,
+                thinkingConfig: {
+                    thinkingBudget: 0, // Disables thinking
+                },
             },
-        },
-        
-    });
 
-    if (response.candidates?.[0]?.content?.parts?.[0]) {
-        const content = JSON.stringify(response.candidates?.[0]?.content?.parts?.[0] ?? undefined);
-        return JSON.parse(content);
+        });
+
+        if (response.candidates?.[0]?.content?.parts?.[0]) {
+            const content = JSON.stringify(response.candidates?.[0]?.content?.parts?.[0] ?? undefined);
+            return JSON.parse(content);
+        }
+
+        await delay(RETRY_DELAY_MS);
     }
 
-    await delay(RETRY_DELAY_MS);
+    return undefined;
 }
 
-return undefined;
-}
-    
+
+

@@ -3,6 +3,8 @@ import { CreateGptDto } from './dto/create-gpt.dto';
 import { orthographyUseCase } from './use-cases/orthography.use-case';
 import OpenAI from 'openai';
 import { GoogleGenAI } from '@google/genai';
+import { ProsConsDiscusserDto } from './dto/proscons-discusser.dto';
+import { orthographyConsDiscusser } from './use-cases/orthografy-discusser-case';
 //import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 
 @Injectable()
@@ -19,7 +21,7 @@ export class GptService {
             reasoning_effort: 'low',
             messages: [
                /* { role: 'system', content: 'You are a helpful assistant that translates English to Spanish.' }, */
-               { role: 'user', content: `Eres un desarrollador experto en ${title}. Crea un programa que ${prompt}` },
+               { role: 'system', content: `Eres un desarrollador experto en ${title}. Crea un programa que ${prompt}` },
             ],
             temperature: 0.3,
             max_tokens: 1024,
@@ -52,4 +54,10 @@ export class GptService {
             title: createGptDto.title ?? ''
         });
    }
+
+   async prosConsDiscusser(discusserGptDto: ProsConsDiscusserDto): Promise<any> {
+      return orthographyConsDiscusser(this.openai, {
+            prompt: discusserGptDto.prompt,
+        });
+    }
 }   
