@@ -5,6 +5,7 @@ import OpenAI from 'openai';
 import { GoogleGenAI } from '@google/genai';
 import { ProsConsDiscusserDto } from './dto/proscons-discusser.dto';
 import { orthographyConsDiscusser } from './use-cases/orthografy-discusser-case';
+import { orthographyConsDiscusserStream } from './use-cases/orthografy-stream-case';
 //import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 
 @Injectable()
@@ -57,6 +58,12 @@ export class GptService {
 
    async prosConsDiscusser(discusserGptDto: ProsConsDiscusserDto): Promise<any> {
       return orthographyConsDiscusser(this.openai, {
+            prompt: discusserGptDto.prompt,
+        });
+    }
+
+    async prosConsDiscusserStream(discusserGptDto: ProsConsDiscusserDto): Promise<any> {
+        return await orthographyConsDiscusserStream(this.openai, {
             prompt: discusserGptDto.prompt,
         });
     }
