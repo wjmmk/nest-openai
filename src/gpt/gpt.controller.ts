@@ -11,7 +11,7 @@ export class GptController {
 
   @Post('orthography')
   correctOrthography(@Body() createGptDto: CreateGptDto) {
-    return this.gptService.callModelAi(createGptDto);
+    return this.gptService.orthographyCheckUseCase(createGptDto);
   }
 
   @Post('orthography-use-case')
@@ -48,11 +48,8 @@ export class GptController {
         const piece = chunk.choices[0].delta?.content ?? '';
 
         if (!piece) continue; // Ignorar chunks vacíos o sin contenido
-
-        console.log(piece);
         res.write(piece);
     }
-
     res.end();
    }
 }

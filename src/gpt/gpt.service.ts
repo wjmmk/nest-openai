@@ -10,6 +10,7 @@ import { orthographyConsDiscusserStream } from './use-cases/orthografy-stream-ca
 
 @Injectable()
 export class GptService {
+
    private openai = new OpenAI({
          baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
          apiKey: process.env.GEMINI_API_KEY,
@@ -50,9 +51,8 @@ export class GptService {
 
    
    async orthographyCheckUseCase(createGptDto: CreateGptDto): Promise<any> {
-        return orthographyUseCase(this.gemini, {
+        return orthographyUseCase(this.openai, {
             prompt: createGptDto.prompt,
-            title: createGptDto.title ?? ''
         });
    }
 
