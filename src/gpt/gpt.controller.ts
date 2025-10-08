@@ -23,11 +23,6 @@ export class GptController {
   /**
    * Endpoint to call OpenAI from Gemini
    */
-  @Post('orthography-openai-from-gemini')
-  orthographyOpenAIFromGemini(@Body() createGptDto: CreateGptDto) {
-    return this.gptService.callOpenAIFromGemini(createGptDto);
-  }
-
   @Post('orthography-openai-pros-cons-discusser')
   orthographyOpenAIProsConsDiscusser(@Body() discusserGptDto: ProsConsDiscusserDto) {
     return this.gptService.prosConsDiscusser(discusserGptDto);
