@@ -39,11 +39,18 @@ export class GptController {
     res.status(HttpStatus.OK);
 
     for await (const chunk of respStream) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const piece = chunk.choices[0].delta?.content ?? '';
+      try {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          const choice = chunk?.choices?.[0];
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          const piece = choice?.delta?.content ?? '';
 
-        if (!piece) continue; // Ignorar chunks vacíos o sin contenido
-        res.write(piece);
+          if (piece) {
+            res.write(piece);
+          }
+      } catch (err) {
+        console.error('Error procesando chunk:', err);
+      }
     }
     res.end();
    }
